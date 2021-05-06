@@ -176,11 +176,12 @@
     .popup__close {
         width: 30px;
         height: 30px;
-        left: 88%;
         bottom: 100%;
         margin-bottom: 25px;
+        transform: translateX(-125%);
     }
     .popup__form {
+        /* width: 100%; */
         border-bottom-left-radius: unset;
         border-bottom-right-radius: unset;
     }
