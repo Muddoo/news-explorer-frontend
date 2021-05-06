@@ -16,7 +16,7 @@ function Nav({ loggedIn, setLoggedin }) {
             <div className='nav__container'>
                 <NavLink exact to='/' className='nav__logo'>NewsExplorer</NavLink>
                 <button className="nav__icon" onClick={() => setOpen(!open)} />
-                <ul className='nav__list'>
+                <div className='nav__list'>
                     <NavLink exact to='/' className='nav__link' activeClassName='nav__link_active'>Home</NavLink>
                     { loggedIn ? 
                         <>
@@ -30,7 +30,7 @@ function Nav({ loggedIn, setLoggedin }) {
                         </> :
                         <NavLink to='/signin' className='nav__auth'>Sign in</NavLink>
                     }   
-                </ul>
+                </div>
             </div>
         </nav>
     )

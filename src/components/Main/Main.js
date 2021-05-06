@@ -12,12 +12,12 @@ function Main({loggedIn}) {
             <PreLoader />
             <div className="main__container">
                 {isNews || <h2 className="main__title">Search results</h2>}
-                <ul className="main__list">
+                <div className="main__list">
                     <Card loggedIn={loggedIn} />
                     <Card loggedIn={loggedIn} />
                     <Card loggedIn={loggedIn} />
                     <Card loggedIn={loggedIn} />
-                </ul>
+                </div>
                 {isNews || <button className='main__button' type='button'>Show more</button>}
             </div>
             <NotFound />

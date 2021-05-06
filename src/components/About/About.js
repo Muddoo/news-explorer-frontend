@@ -5,7 +5,7 @@ function About() {
     return (
         <div className="about">
             <div className="about__container">
-                <img className='about__image' src={photo} alt='photo' />
+                <img className='about__image' src={photo} alt='' />
                 <div className='about__group'>
                     <h2 className='about__title'>About the author</h2>
                     <p className="about__text">

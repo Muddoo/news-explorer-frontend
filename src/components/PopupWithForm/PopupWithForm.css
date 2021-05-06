@@ -57,7 +57,7 @@
 .popup__form {  
     position: relative;
     width: 430px;
-    min-height: 380px;
+    /* min-height: 380px; */
     background: #FFFFFF;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
     border-radius: 16px;
@@ -171,15 +171,20 @@
 @media screen and (max-width: 600px) {
     .popup {
         padding-top: 70px;
-        align-items: flex-start;
+        align-items: stretch;
     }
     .popup__close {
         width: 30px;
         height: 30px;
         left: 88%;
-        bottom: 105%;
+        bottom: 100%;
+        margin-bottom: 25px;
     }
     .popup__form {
-        margin: 0 8px;
+        border-bottom-left-radius: unset;
+        border-bottom-right-radius: unset;
+    }
+    .popup__title_tooltip {
+        font-size: 20px;
     }
 }

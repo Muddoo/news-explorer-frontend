@@ -4,7 +4,6 @@ import './App.css'
 import Nav from '../Nav/Nav.js'
 import Header from '../Header/Header.js'
 import PopupWithForm from '../PopupWithForm/PopupWithForm.js'
-import ToolTip from '../ToolTip/ToolTip.js'
 import Footer from '../Footer/Footer.js'
 import About from '../About/About.js'
 import Main from '../Main/Main.js'
@@ -22,7 +21,6 @@ function App() {
                 <About />
                 <Footer />
                 <PopupWithForm setLoggedin={setLoggedin} /> 
-                <ToolTip />
             </Route>
         </div>
     )
