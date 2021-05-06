@@ -1,6 +1,6 @@
 import './Nav.css'
 import { useState } from 'react'
-import { NavLink, useHistory } from 'react-router-dom'
+import { NavLink, useHistory, withRouter } from 'react-router-dom'
 
 function Nav({ loggedIn, setLoggedin }) {
     const history = useHistory();
@@ -36,4 +36,4 @@ function Nav({ loggedIn, setLoggedin }) {
     )
 }
 
-export default Nav
+export default withRouter(Nav)
