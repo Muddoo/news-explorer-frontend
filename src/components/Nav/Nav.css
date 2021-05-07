@@ -163,20 +163,22 @@
         padding: 16px;
         height: auto;
         max-height: 56px;
-        transition: all .4s 0s, background .5s 0.2s;
+        transition: all .3s 0s, background .5s 0.2s;
         overflow-y: hidden;
     }
     .nav_open {
         --bg: #1A1B22;
         --color: white;
         max-height: 100vh;
-        transition: all 1s, background 0s;
+        transition: all .6s, background 0s;
     }
     .nav__logo {
         transition: all 0s .3s;
+        pointer-events: none;
     }
     .nav_open .nav__logo {
         transition: all 0s;
+        pointer-events: all;
     }
     .nav__icon {
         all: unset;
