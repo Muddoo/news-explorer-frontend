@@ -1,9 +1,14 @@
 .card {
+    all: unset;
     position: relative;
     max-width: 450px;
     background-color: #fff;
     border-radius: 16px;
     overflow: hidden;
+    display: grid;
+    grid-template-rows: max-content;
+    grid-auto-rows: auto;
+    /* cursor: pointer; */
 }
 
 .card__image {
@@ -12,10 +17,13 @@
     object-fit: cover;
     object-position: center;
     display: block;
+    background-color: #347EFF;
 }
 
 .card__body {
     padding: 20px 24px 24px;
+    display: grid;
+    grid-template-rows: max-content max-content max-content;
 }
 
 .card__date {
@@ -39,6 +47,11 @@
     line-height: 30px;
     color: #1A1B22;
     margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card__text {
@@ -67,6 +80,7 @@
     text-transform: uppercase;
     color: #B6BCBF;
     margin: 0;
+    align-self: flex-end;
 }
 
 .card__save {
@@ -124,7 +138,7 @@
     transition: all .2s ease-out;
 }
 
-.card__save:focus .card__tooltip {
+.card__save:focus-within .card__tooltip {
     opacity: 1;
     visibility: visible;
 }
@@ -148,6 +162,7 @@
     align-items: center;
     padding: 8px 20px;
     white-space: nowrap;
+    text-transform: capitalize;
     /* width: 87px;
     height: 40px; */
 }

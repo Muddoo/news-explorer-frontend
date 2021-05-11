@@ -8,6 +8,4 @@
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
-    min-height: 150vh;
-    /* background-color: black; */
 }

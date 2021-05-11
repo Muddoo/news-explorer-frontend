@@ -9,7 +9,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    column-gap: 40px;
+    column-gap: 20px;
+}
+
+.search__group {
+    all: unset;
+    position: relative;
+    flex: 1;
 }
 
 .search__input {
@@ -20,9 +26,23 @@
     font-size: 16px;
     line-height: 22px;
     color: #1A1B22;
-    max-width: 376px;
-    display: inline-flex;
-    flex-grow: 1;
+    width: 100%;
+}
+
+.search__error {
+    position: absolute;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+    bottom: 100%;
+    margin: 0;
+    margin-top: -1px;
+    white-space: nowrap;
+    text-align: center;
+    width: 100%;
 }
 
 .search__btn {

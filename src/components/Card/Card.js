@@ -1,26 +1,63 @@
 import './Card.css'
-import articleImg from '../../images/image_08.png'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
+import MainApi from  '../../utils/MainApi'
+import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Card({loggedIn}) {
+function Card({ loggedIn, article, setArticles, keyWord }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news');
     const [isSaved, setSaved] = useState(false)
+    const currentUser = useContext(CurrentUserContext)
+
+    const mainAPi = new MainApi({
+        // baseUrl: 'https://obscure-island-11341.herokuapp.com',
+        baseUrl: 'http://localhost:3001',
+        options: {
+            headers: {
+              authorization: `Bearer ${currentUser?.token}`,
+              "Content-Type": "application/json",
+            }
+        }
+    })
 
     function handleClick(e) {
-        if(isNews) return e.target.closest('.card').remove();
-        if(loggedIn) return setSaved(!isSaved)
+
+        if(isNews) {
+            mainAPi.toggleArticle({id: article._id, method: 'DELETE'})
+            .then(() => setArticles(articles => articles.filter(a => article._id !== a._id)))
+            .catch(err => console.log(err))
+            return
+        }
+
+        if(currentUser) {
+            const body = {
+                keyword: keyWord,
+                title: article.title,
+                text: article.content,
+                date: formatDate(article.publishedAt),
+                source: article.source.name,
+                link: article.url,
+                image: article.urlToImage || 'Group.svg',
+            }
+            mainAPi.toggleArticle({body})
+            .then(() => setSaved(!isSaved))
+            .catch(err => console.log(err))
+        }
+    }
+
+    function formatDate(date) {
+        return new Date(date).toLocaleDateString('en',{month: 'long', day: 'numeric', year: "numeric"})
     }
 
     return (
         <article className='card'>
-            <img src={articleImg} alt="article-img" className="card__image"/>
+            <img src={article.image || article.urlToImage || 'Group.svg'} alt="article-img" className="card__image"/>
             <div className="card__body">
-                <p className="card__date">November 4, 2020</p>
-                <p className='card__heading'>Everyone Needs a Special 'Sit Spot' in Nature</p>
-                <p className="card__text">Ever since I read Richard Louv's influential book, "Last Child in the Woods," the idea of having a special "sit spot" has stuck with me. This advice, which Louv attributes to nature educator Jon Young, is for both adults and children to find...</p>
-                <p className="card__footer">treehugger</p>
+                <p className="card__date">{isNews ? article.date : formatDate(article.publishedAt)}</p>
+                <p className='card__heading'>{article.title}</p>
+                <p className="card__text">{isNews ? article.text : article.content}</p>
+                <p className="card__footer">{isNews ? article.source : article.source.name}</p>
             </div>
             <button 
                 type='button' 
@@ -29,7 +66,7 @@ function Card({loggedIn}) {
                 { !loggedIn ? <p className="card__tooltip">Sign in to save articles</p> : null }
                 { isNews ? <p className="card__tooltip">Remove from saved</p> : null }
             </button>
-            <p className="card__keyword">Nature</p>
+            {isNews && <p className="card__keyword">{keyWord}</p>}
         </article>
     )
 }

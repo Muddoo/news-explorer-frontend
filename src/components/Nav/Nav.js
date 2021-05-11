@@ -1,14 +1,17 @@
 import './Nav.css'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
+import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Nav({ loggedIn, setLoggedin }) {
+function Nav({ loggedIn, setCurrentUser }) {
     const history = useHistory();
     const isNewsRoute = history.location.pathname.includes('saved-news');
     const [ open, setOpen ] = useState(false);
+    const currentUser = useContext(CurrentUserContext)
 
     function handleLogout() {
-        setLoggedin(false)
+        setCurrentUser(false)
+        localStorage.removeItem('token')
     }
 
     return (
@@ -24,7 +27,7 @@ function Nav({ loggedIn, setLoggedin }) {
                                 Saved articles
                             </NavLink>
                             <div className='nav__logout'>
-                                <span className='nav__user'>Elise</span>
+                                <span className='nav__user'>{currentUser?.name}</span>
                                 <NavLink to='/' className='nav__logout-btn' onClick={handleLogout} />
                             </div>
                         </> :
