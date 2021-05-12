@@ -11,6 +11,7 @@ function Main({ loggedIn, spinner, articles, setArticles, setPublicArticles, key
     return (
         <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>
             <div className="main__container">
+                { spinner && <PreLoader /> }
                 {(!isNews && articles?.length) ? <h2 className="main__title">Search results</h2> : null}
 
                 {articles?.length ?
@@ -26,7 +27,6 @@ function Main({ loggedIn, spinner, articles, setArticles, setPublicArticles, key
                     </div> : 
                     null}
                     
-                { spinner && <PreLoader /> }
                 {(!isNews && articles?.length && index*3 <= articles?.length) ?
                     <button className='main__button' type='button' onClick={() => setIndex(index+1)}>
                         Show more
