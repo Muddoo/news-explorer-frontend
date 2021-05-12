@@ -15,6 +15,6 @@ class Api {
 }
 
 export default new Api({
-    // baseUrl: 'https://nomoreparties.co/news/v2/everything?',
-    baseUrl: 'https://newsapi.org/v2/everything?',
+    baseUrl: 'https://nomoreparties.co/news/v2/everything?',
+    // baseUrl: 'https://newsapi.org/v2/everything?',
 })
