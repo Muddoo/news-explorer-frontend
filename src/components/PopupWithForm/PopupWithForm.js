@@ -57,6 +57,7 @@ function PopupWithForm({ setCurrentUser }) {
                 .then(async token => {
                     localStorage.setItem('token', token);
                     setCurrentUser({... await checkToken(token), token});
+                    // setIsOpen(false)
                     history.push('/')
                 })
                 .catch(err => {

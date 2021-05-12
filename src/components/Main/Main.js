@@ -34,7 +34,7 @@ function Main({ loggedIn, spinner, articles, setArticles, setPublicArticles, key
                      null}
             </div> 
 
-            {(articles && !articles.length && !isNews && keyWord) && <NotFound />}
+            {(articles && !articles.length && !isNews && index) ? <NotFound /> : null}
             {articleServerErr && !spinner && <NotFound articleServerErr={articleServerErr} />}
         </div>
     )

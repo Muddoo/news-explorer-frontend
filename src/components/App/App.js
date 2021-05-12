@@ -19,15 +19,17 @@ function App() {
     const [keyWord, setKeyWord] = useState()
     const [savedKeyword, setSavedKeyword] = useState()
     const [articleServerErr, setArticleServerErr] = useState(false)
-    const [index, setIndex] = useState(1)
+    const [index, setIndex] = useState(0)
     const [currentUser,setCurrentUser] = useState()
     
     useEffect(() => {
         if(articleServerErr) setArticleServerErr(false)
         if(keyWord) {
-            setIndex(1)
             newsApi.searchArticles(keyWord)
-            .then(res => setArticles(res.articles))
+            .then(res => {
+                setArticles(res.articles)
+                setIndex(1)
+            })
             .catch(err => {
                 console.log(err);
                 setArticleServerErr(true)
@@ -48,6 +50,7 @@ function App() {
             setArticles([])
             setKeyWord()
             setSavedKeyword()
+            setIndex()
             localStorage.removeItem('articles')
         }
     },[currentUser])

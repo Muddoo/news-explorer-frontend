@@ -4,25 +4,26 @@ import { useState, useEffect } from 'react'
 function SearchForm({ setSpinner, setKeyWord }) {
     const [value, setValue] = useState('');
     const [err, setErr] = useState('');
-    const [submit, setSubmit] = useState(false)
+    // const [submit, setSubmit] = useState(false)
 
-    useEffect(() => {
-        if( value || submit ) setSpinner(true);
-        if(!value && !submit) setSpinner(false)
-    }, [value, submit])
+    // useEffect(() => {
+    //     if( value || submit ) setSpinner(true);
+    //     if(!value && !submit) setSpinner(false)
+    // }, [value, submit])
 
     function handleChange(e) {
         setErr('');
         setKeyWord('')
         setValue(e.target.value);
-        setSubmit(false)
+        // setSubmit(false)
     }
     function handleSubmit(e) {
         e.preventDefault();
         if(!value.trim()) setErr(true);
         else {
             setKeyWord(value);
-            setSubmit(true)
+            setSpinner(true)
+            // setSubmit(true)
         }
         return setValue('')
     }
