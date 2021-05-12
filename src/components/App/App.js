@@ -43,7 +43,8 @@ function App() {
             const storedArticles = JSON.parse(localStorage.getItem('articles'));
             setLoggedin(true);
             setArticles(storedArticles?.slice(1) || []);
-            setSavedKeyword(storedArticles?.[0].keyWord)
+            setSavedKeyword(storedArticles?.[0].keyWord);
+            setIndex(1)
         }
         else {
             setLoggedin(false)
@@ -58,6 +59,8 @@ function App() {
     useEffect(() => {
         if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]))
     },[articles])
+
+    console.log(articles)
     
     return (
         <CurrentUserContext.Provider value={currentUser} className='app'>
