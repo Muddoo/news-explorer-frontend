@@ -1,14 +1,16 @@
 import './Card.css'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import MainApi from  '../../utils/MainApi'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Card({ loggedIn, article, setArticles, keyWord }) {
+function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news');
-    const [isSaved, setSaved] = useState(false)
+    const [isSaved, setSaved] = useState()
     const currentUser = useContext(CurrentUserContext)
+
+    useEffect(() => setSaved(article._id),[article])
 
     const mainAPi = new MainApi({
         // baseUrl: 'https://obscure-island-11341.herokuapp.com',
@@ -21,11 +23,20 @@ function Card({ loggedIn, article, setArticles, keyWord }) {
         }
     })
 
-    function handleClick(e) {
+    function handleClick() {
 
         if(isNews) {
             mainAPi.toggleArticle({id: article._id, method: 'DELETE'})
-            .then(() => setArticles(articles => articles.filter(a => article._id !== a._id)))
+            .then(() => {
+                setArticles(articles => articles.filter(a => article._id !== a._id))
+                setPublicArticles(articles => articles.map(a => {
+                    if(a._id === article._id) {
+                        a._id = null;
+                        return a
+                    }
+                    return a
+                }))
+            })
             .catch(err => console.log(err))
             return
         }
@@ -40,8 +51,14 @@ function Card({ loggedIn, article, setArticles, keyWord }) {
                 link: article.url,
                 image: article.urlToImage || 'Group.svg',
             }
-            mainAPi.toggleArticle({body})
-            .then(() => setSaved(!isSaved))
+            const method = isSaved ? 'DELETE' : 'POST';
+            const id = isSaved ? article._id : ''
+            mainAPi.toggleArticle({body, method, id})
+            .then((res) => {
+                setSaved(!isSaved)
+                article._id = res._id;
+                setArticles(articles => articles.map(a => a === article ? article : a))
+            })
             .catch(err => console.log(err))
         }
     }
@@ -61,7 +78,7 @@ function Card({ loggedIn, article, setArticles, keyWord }) {
             </div>
             <button 
                 type='button' 
-                className={`card__save ${isSaved && 'card__saved'} ${isNews && 'card__delete'}`} 
+                className={`card__save ${isSaved && 'card__saved'} ${(isNews ) && 'card__delete'}`} 
                 onClick={handleClick}>
                 { !loggedIn ? <p className="card__tooltip">Sign in to save articles</p> : null }
                 { isNews ? <p className="card__tooltip">Remove from saved</p> : null }

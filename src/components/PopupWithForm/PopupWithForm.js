@@ -17,19 +17,16 @@ function PopupWithForm({ setCurrentUser }) {
     const [link, setLink] = useState();
 
     useEffect(() => {
-        // if(currentUser) {
-        //     history.push('/');
-        //     setIsOpen(false)
-        // }
+        if(currentUser) return history.push('/');
         reset()
         setServerError()
-        if(/signin|signup/.test(currentPath) && !isOpen) setIsOpen(true); else setIsOpen(false);
+        if(/signin|signup/.test(currentPath) && !isOpen) setIsOpen(true);
         if(/signin|signup/.test(currentPath)) {
             setTxt(currentPath.replace('/sign',''));
             setLink(currentPath.includes('signin') ? 'up' : 'in');
             setTooltip(false)
         }
-    },[currentPath])
+    },[currentPath, currentUser])
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -42,10 +39,6 @@ function PopupWithForm({ setCurrentUser }) {
                 localStorage.removeItem('token')
             })
     }, [])
-
-    // useEffect(() => {
-    //     if(currentUser) history.push('/')
-    // }, [currentUser])
 
     function handleToggle(e) {
         if(e.target === e.currentTarget) {
@@ -65,7 +58,6 @@ function PopupWithForm({ setCurrentUser }) {
                     localStorage.setItem('token', token);
                     setCurrentUser({... await checkToken(token), token});
                     history.push('/')
-                    // setIsOpen(false)
                 })
                 .catch(err => {
                     console.log(err);
@@ -86,83 +78,85 @@ function PopupWithForm({ setCurrentUser }) {
     }
 
     return (
-        <div 
-            className={`popup ${isOpen || 'popup_hidden'}`}
-            onClick={handleToggle}
-            >
-            {!isTooltip ?
-                <form 
-                    className='popup__form'
-                    onSubmit={handleSubmit}
-                    noValidate >
-                    <h2 className='popup__title'>{'Sign ' + txt}</h2>
-                    <fieldset className='popup__container'>
-                        <div className='popup__wrapper'>
-                            <label className='popup__label' htmlFor='email'>Email</label>
-                            <input 
-                                className='popup__field' 
-                                type='email' 
-                                name='email' 
-                                id='email' 
-                                placeholder='Enter email' 
-                                autoComplete='off'
-                                value={fields['email'] || ''}
-                                onChange={handleChange}
-                                required />
-                            <p className="popup__error">{errors['email']?.substring(0,44)}</p>
-                        </div>
-                        <div className='popup__wrapper'>
-                            <label className='popup__label' htmlFor='password'>Password</label>
-                            <input 
-                                className='popup__field' 
-                                type='password' 
-                                name='password' 
-                                id='password' 
-                                placeholder='Enter password'
-                                minLength={4}
-                                maxLength={12}
-                                value={fields['password'] || ''}
-                                onChange={handleChange}
-                                required />
-                            <p className="popup__error">{errors['password']?.substring(0,50)}</p>
-                        </div>
-                        {txt === 'up' ?
+        <>
+        {!localStorage.getItem('token') &&
+            <div 
+                className={`popup ${isOpen || 'popup_hidden'}`}
+                onClick={handleToggle}
+                >
+                {!isTooltip ?
+                    <form 
+                        className='popup__form'
+                        onSubmit={handleSubmit}
+                        noValidate >
+                        <h2 className='popup__title'>{'Sign ' + txt}</h2>
+                        <fieldset className='popup__container'>
                             <div className='popup__wrapper'>
-                                <label className='popup__label' htmlFor='name'>Username</label>
+                                <label className='popup__label' htmlFor='email'>Email</label>
                                 <input 
-                                    className='popup__field'
-                                    type='text'
-                                    name='name'
-                                    id='name' 
-                                    placeholder='Enter your username'
-                                    minLength='4'
-                                    maxLength='6'
+                                    className='popup__field' 
+                                    type='email' 
+                                    name='email' 
+                                    id='email' 
+                                    placeholder='Enter email' 
                                     autoComplete='off'
-                                    value={fields['name'] || ''}
+                                    value={fields['email'] || ''}
                                     onChange={handleChange}
                                     required />
-                                <p className="popup__error">{errors['name']?.substring(0,50)}</p>
-                            </div> : null}
-                    </fieldset>
-                    <button type='submit' className='popup__btn-submit' disabled={!isValid}>
-                        {'Sign ' + txt}
-                        {/* {currentPath.includes('signup') && <p className='popup__error-submit'>{serverError}</p>} */}
-                        <p className='popup__error-submit'>{serverError}</p>
-                    </button>
-                    <button type='button' className='popup__btn-link' >
-                        or <NavLink className='popup__link' to={'sign' + link}>
-                                {'Sign ' + link}
-                        </NavLink>
-                    </button>
-                    <button type='button' className="popup__close" onClick={handleToggle} />
-                </form> : null}
-            {isTooltip ?
-                <div className="popup__form">
-                    <h2 className="popup__title popup__title_tooltip">Registration successfully completed!</h2>
-                    <NavLink to='/signin' className="popup__link">Sign in</NavLink>
-                    <button type='button' className='popup__close' onClick={handleToggle}/>
-                </div> : null}
-        </div>
+                                <p className="popup__error">{errors['email']?.substring(0,44)}</p>
+                            </div>
+                            <div className='popup__wrapper'>
+                                <label className='popup__label' htmlFor='password'>Password</label>
+                                <input 
+                                    className='popup__field' 
+                                    type='password' 
+                                    name='password' 
+                                    id='password' 
+                                    placeholder='Enter password'
+                                    minLength={4}
+                                    maxLength={12}
+                                    value={fields['password'] || ''}
+                                    onChange={handleChange}
+                                    required />
+                                <p className="popup__error">{errors['password']?.substring(0,50)}</p>
+                            </div>
+                            {txt === 'up' ?
+                                <div className='popup__wrapper'>
+                                    <label className='popup__label' htmlFor='name'>Username</label>
+                                    <input 
+                                        className='popup__field'
+                                        type='text'
+                                        name='name'
+                                        id='name' 
+                                        placeholder='Enter your username'
+                                        minLength='4'
+                                        maxLength='6'
+                                        autoComplete='off'
+                                        value={fields['name'] || ''}
+                                        onChange={handleChange}
+                                        required />
+                                    <p className="popup__error">{errors['name']?.substring(0,50)}</p>
+                                </div> : null}
+                        </fieldset>
+                        <button type='submit' className='popup__btn-submit' disabled={!isValid}>
+                            {'Sign ' + txt}
+                            <p className='popup__error-submit'>{serverError}</p>
+                        </button>
+                        <button type='button' className='popup__btn-link' >
+                            or <NavLink className='popup__link' to={'sign' + link}>
+                                    {'Sign ' + link}
+                            </NavLink>
+                        </button>
+                        <button type='button' className="popup__close" onClick={handleToggle} />
+                    </form> : null}
+                {isTooltip ?
+                    <div className="popup__form">
+                        <h2 className="popup__title popup__title_tooltip">Registration successfully completed!</h2>
+                        <NavLink to='/signin' className="popup__link">Sign in</NavLink>
+                        <button type='button' className='popup__close' onClick={handleToggle}/>
+                    </div> : null}
+            </div>}
+        </>
     )
 }
 

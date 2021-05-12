@@ -5,32 +5,32 @@ import { useState, useContext, useEffect } from 'react'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 import MainApi from  '../../utils/MainApi'
 
-function SavedNews() {
+function SavedNews({ setPublicArticles }) {
     const currentUser = useContext(CurrentUserContext);
     const [savedArticles, setSavedArticles] = useState([]);
     const [savedKeywords, setSavedKeywords] = useState([])
 
-    useEffect(() => {
-        const mainAPi = new MainApi({
-            // baseUrl: 'https://obscure-island-11341.herokuapp.com',
-            baseUrl: 'http://localhost:3001',
-            options: {
-                headers: {
-                  authorization: `Bearer ${currentUser?.token}`,
-                  "Content-Type": "application/json",
-                }
+    const mainAPi = new MainApi({
+        // baseUrl: 'https://obscure-island-11341.herokuapp.com',
+        baseUrl: 'http://localhost:3001',
+        options: {
+            headers: {
+              authorization: `Bearer ${currentUser?.token}`,
+              "Content-Type": "application/json",
             }
-        })
-
+        }
+    })
+    useEffect(() => {
         mainAPi.getArticles()
-            .then(articles => {
-                console.log(articles)
-                const keywords = [... new Set(articles.map(({keyword}) => keyword))]
-                setSavedArticles(articles)
-                setSavedKeywords(keywords)
-            })
+            .then(articles => setSavedArticles(articles))
             .catch(err => console.log(err))
     }, [])
+
+    useEffect(() => {
+        const keywords = [... new Set(savedArticles.map(({keyword}) => keyword))];
+        const keywordText = keywords.slice(0,2).join(', ') + (keywords.length > 2 ? `, and ${keywords.length-2} others` : '');
+        setSavedKeywords(keywordText)
+    }, [savedArticles])
 
     return (
         <div className="savednews">
@@ -39,15 +39,11 @@ function SavedNews() {
                     <div className="savednews__heading">Saved articles</div>
                     <div className="savednews__main">{`${currentUser?.name}, you have ${savedArticles.length} saved articles`}</div>
                     <div className="savednews__footer">
-                        {savedKeywords.length ?
-                             <span>By keywords: </span> :
-                             <span>No Keywords </span>
-                        }
+                        <span>By keywords: </span> {savedKeywords || 'No Keys!'}
                     </div>
-                    {/* <div className="savednews__footer"><span>By keywords: </span>Nature, Yellowstone, and 2 other</div> */}
                 </div>
             </header>
-            <Main articles={savedArticles} setArticles={setSavedArticles} />
+            <Main articles={savedArticles} setArticles={setSavedArticles} setPublicArticles={setPublicArticles} />
             <Footer />
         </div>
     )

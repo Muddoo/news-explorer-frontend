@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
 
-function Main({ loggedIn, spinner, articles, setArticles, keyWord, articleServerErr, index, setIndex }) {
+function Main({ loggedIn, spinner, articles, setArticles, setPublicArticles, keyWord, articleServerErr, index, setIndex }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
     
@@ -17,10 +17,10 @@ function Main({ loggedIn, spinner, articles, setArticles, keyWord, articleServer
                     <div className="main__list">
                         {isNews ?
                             articles.map((article) => (
-                            <Card key={article._id} loggedIn={loggedIn} article={article} keyWord={article.keyword} setArticles={setArticles} />
+                            <Card key={article._id} loggedIn={loggedIn} article={article} keyWord={article.keyword} setArticles={setArticles} setPublicArticles={setPublicArticles} />
                             )) :
                             articles.slice(0,index*3).map((article,i) => (
-                                <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} />
+                                <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} setArticles={setArticles} />
                             ))
                         }
                     </div> : 
@@ -34,7 +34,7 @@ function Main({ loggedIn, spinner, articles, setArticles, keyWord, articleServer
                      null}
             </div> 
 
-            {(articles && !articles.length && !isNews) && <NotFound />}
+            {(articles && !articles.length && !isNews && keyWord) && <NotFound />}
             {articleServerErr && !spinner && <NotFound articleServerErr={articleServerErr} />}
         </div>
     )

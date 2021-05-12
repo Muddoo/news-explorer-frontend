@@ -10,8 +10,8 @@ function Nav({ loggedIn, setCurrentUser }) {
     const currentUser = useContext(CurrentUserContext)
 
     function handleLogout() {
-        setCurrentUser(false)
         localStorage.removeItem('token')
+        setCurrentUser(false)
     }
 
     return (

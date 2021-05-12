@@ -14,9 +14,10 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
 
 function App() {
     const [loggedin, setLoggedin] = useState(true)
-    const [articles, setArticles] = useState()
+    const [articles, setArticles] = useState([])
     const [spinner, setSpinner] = useState(false)
     const [keyWord, setKeyWord] = useState()
+    const [savedKeyword, setSavedKeyword] = useState()
     const [articleServerErr, setArticleServerErr] = useState(false)
     const [index, setIndex] = useState(1)
     const [currentUser,setCurrentUser] = useState()
@@ -26,10 +27,7 @@ function App() {
         if(keyWord) {
             setIndex(1)
             newsApi.searchArticles(keyWord)
-            .then(res => {
-                setArticles(res.articles);
-                localStorage.setItem('articles', JSON.stringify([{ keyWord }, ...res.articles]))
-            })
+            .then(res => setArticles(res.articles))
             .catch(err => {
                 console.log(err);
                 setArticleServerErr(true)
@@ -42,17 +40,27 @@ function App() {
         if(currentUser || localStorage.getItem('token')) {
             const storedArticles = JSON.parse(localStorage.getItem('articles'));
             setLoggedin(true);
-            setArticles(storedArticles?.slice[1]);
-            setKeyWord(storedArticles?.[0].keyWord)
+            setArticles(storedArticles?.slice(1) || []);
+            setSavedKeyword(storedArticles?.[0].keyWord)
         }
-        else setLoggedin(false)
-    }, [currentUser])
+        else {
+            setLoggedin(false)
+            setArticles([])
+            setKeyWord()
+            setSavedKeyword()
+            localStorage.removeItem('articles')
+        }
+    },[currentUser])
 
+    useEffect(() => {
+        if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]))
+    },[articles])
+    
     return (
         <CurrentUserContext.Provider value={currentUser} className='app'>
             <Nav loggedIn={loggedin} setCurrentUser={setCurrentUser} />
             <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                <SavedNews />
+                <SavedNews setPublicArticles={setArticles} />
             </ProtectedRoute>
             <Route exact path={['/','/signin','/signup']}>
                 <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
@@ -60,10 +68,11 @@ function App() {
                     loggedIn={loggedin} 
                     spinner={spinner} 
                     articles={articles} 
-                    keyWord={keyWord} 
+                    keyWord={keyWord || savedKeyword} 
                     articleServerErr={articleServerErr}
                     index={index}
-                    setIndex={setIndex} />
+                    setIndex={setIndex}
+                    setArticles={setArticles} />
                 <About />
                 <Footer />
                 <PopupWithForm setCurrentUser={setCurrentUser} />
