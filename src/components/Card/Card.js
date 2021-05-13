@@ -69,13 +69,16 @@ function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles }) {
 
     return (
         <article className='card'>
-            <img src={article.image || article.urlToImage || 'Group.svg'} alt="article-img" className="card__image"/>
-            <div className="card__body">
-                <p className="card__date">{isNews ? article.date : formatDate(article.publishedAt)}</p>
-                <p className='card__heading'>{article.title}</p>
-                <p className="card__text">{isNews ? article.text : article.content}</p>
-                <p className="card__footer">{isNews ? article.source : article.source.name}</p>
-            </div>
+            <a target='_blank' href={article.url || article.link} className='card__link'>
+                <img src={article.image || article.urlToImage || 'Group.svg'} alt="article-img" className="card__image"/>
+                <div className="card__body">
+                    <p className="card__date">{isNews ? article.date : formatDate(article.publishedAt)}</p>
+                    <p className='card__heading'>{article.title}</p>
+                    <p className="card__text">{isNews ? article.text : article.content}</p>
+                    <p className="card__footer">{isNews ? article.source : article.source.name}</p>
+                </div>
+                {isNews && <p className="card__keyword">{keyWord}</p>}
+            </a>
             <button 
                 type='button' 
                 className={`card__save ${isSaved && 'card__saved'} ${(isNews ) && 'card__delete'}`} 
@@ -83,7 +86,6 @@ function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles }) {
                 { !loggedIn ? <p className="card__tooltip">Sign in to save articles</p> : null }
                 { isNews ? <p className="card__tooltip">Remove from saved</p> : null }
             </button>
-            {isNews && <p className="card__keyword">{keyWord}</p>}
         </article>
     )
 }
