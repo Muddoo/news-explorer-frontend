@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Route } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
 import './App.css'
 import Nav from '../Nav/Nav.js'
 import Header from '../Header/Header.js'
@@ -81,6 +81,7 @@ function App() {
                 <Footer />
                 <PopupWithForm setCurrentUser={setCurrentUser} />
             </Route>
+            <Redirect to='/' />
         </CurrentUserContext.Provider>
     )
 }
