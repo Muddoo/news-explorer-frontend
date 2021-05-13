@@ -59,8 +59,6 @@ function App() {
     useEffect(() => {
         if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]))
     },[articles])
-
-    console.log(articles)
     
     return (
         <CurrentUserContext.Provider value={currentUser} className='app'>
