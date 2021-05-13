@@ -4,23 +4,38 @@ import { useHistory } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
 
-function Main({loggedIn}) {
+function Main({ loggedIn, spinner, articles, setArticles, setPublicArticles, keyWord, articleServerErr, index, setIndex }) {
     const history = useHistory();
-    const isNews = history.location.pathname.includes('aaa')
+    const isNews = history.location.pathname.includes('saved-news')
+    
     return (
-        <div className="main">
-            <PreLoader />
+        <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>
             <div className="main__container">
-                {isNews || <h2 className="main__title">Search results</h2>}
-                <div className="main__list">
-                    <Card loggedIn={loggedIn} />
-                    <Card loggedIn={loggedIn} />
-                    <Card loggedIn={loggedIn} />
-                    <Card loggedIn={loggedIn} />
-                </div>
-                {isNews || <button className='main__button' type='button'>Show more</button>}
-            </div>
-            <NotFound />
+                { spinner && <PreLoader /> }
+                {(!isNews && articles?.length) ? <h2 className="main__title">Search results</h2> : null}
+
+                {articles?.length ?
+                    <div className="main__list">
+                        {isNews ?
+                            articles.map((article) => (
+                            <Card key={article._id} loggedIn={loggedIn} article={article} keyWord={article.keyword} setArticles={setArticles} setPublicArticles={setPublicArticles} />
+                            )) :
+                            articles.slice(0,index*3).map((article,i) => (
+                                <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} setArticles={setArticles} />
+                            ))
+                        }
+                    </div> : 
+                    null}
+                    
+                {(!isNews && articles?.length && index*3 <= articles?.length) ?
+                    <button className='main__button' type='button' onClick={() => setIndex(index+1)}>
+                        Show more
+                    </button> :
+                     null}
+            </div> 
+
+            {(articles && !articles.length && !isNews && index) ? <NotFound /> : null}
+            {articleServerErr && !spinner && <NotFound articleServerErr={articleServerErr} />}
         </div>
     )
 }
