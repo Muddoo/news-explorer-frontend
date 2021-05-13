@@ -131,7 +131,7 @@ function PopupWithForm({ setCurrentUser }) {
                                         id='name' 
                                         placeholder='Enter your username'
                                         minLength='4'
-                                        maxLength='6'
+                                        maxLength='10'
                                         autoComplete='off'
                                         value={fields['name'] || ''}
                                         onChange={handleChange}
