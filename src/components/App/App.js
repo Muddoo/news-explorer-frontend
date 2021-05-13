@@ -44,7 +44,7 @@ function App() {
             setLoggedin(true);
             setArticles(storedArticles?.slice(1) || []);
             setSavedKeyword(storedArticles?.[0].keyWord);
-            setIndex(1)
+            storedArticles && setIndex(1)
         }
         else {
             setLoggedin(false)
