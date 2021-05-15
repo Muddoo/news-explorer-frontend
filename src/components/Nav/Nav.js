@@ -21,7 +21,7 @@ function Nav({ loggedIn, setCurrentUser }) {
                 <button className="nav__icon" onClick={() => setOpen(!open)} />
                 <div className='nav__list'>
                     <NavLink exact to='/' className='nav__link' activeClassName='nav__link_active'>Home</NavLink>
-                    { loggedIn ? 
+                    { currentUser ? 
                         <>
                             <NavLink to='/saved-news' className='nav__link' activeClassName='nav__link_active'>
                                 Saved articles

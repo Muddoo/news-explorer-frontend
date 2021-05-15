@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import { Redirect, Route,Switch } from 'react-router-dom'
 import { checkToken } from '../../utils/auth'
 import './App.css'
 import Nav from '../Nav/Nav.js'
@@ -72,7 +72,7 @@ function App() {
     },[articles])
     
     return (
-        <div className='app'>
+        <Switch className='app'>
             <CurrentUserContext.Provider value={currentUser}>
                 <Nav loggedIn={loggedin} setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
@@ -95,7 +95,7 @@ function App() {
                 </Route>
                 <Redirect to='/' />
             </CurrentUserContext.Provider>
-        </div>
+        </Switch>
     )
 }
 
