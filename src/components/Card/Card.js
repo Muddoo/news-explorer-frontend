@@ -28,7 +28,7 @@ function Card({ loggedIn, article, keyWord, toggleArticle }) {
             <button 
                 type='button' 
                 className={`card__save ${isSaved && 'card__saved'} ${(isNews ) && 'card__delete'}`} 
-                onClick={() => toggleArticle(article)}>
+                onClick={() => loggedIn && toggleArticle(article)}>
                 { !loggedIn ? <p className="card__tooltip">Sign in to save articles</p> : null }
                 { isNews ? <p className="card__tooltip">Remove from saved</p> : null }
             </button>
