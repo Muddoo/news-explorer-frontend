@@ -119,10 +119,10 @@ function App() {
             <CurrentUserContext.Provider value={currentUser}>
                 <Nav loggedin={loggedin} setLoggedin={setLoggedin} setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                    <SavedNews setPublicArticles={setArticles} savedArticles={savedArticles} setSavedArticles={setSavedArticles} toggleArticle={toggleArticle} />
+                    <SavedNews savedArticles={savedArticles} toggleArticle={toggleArticle} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
-                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} setSavedArticles={setSavedArticles} />
+                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
                     <Main 
                         loggedIn={loggedin} 
                         spinner={spinner} 
