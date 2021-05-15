@@ -61,28 +61,30 @@ function App() {
     },[articles])
     
     return (
-        <CurrentUserContext.Provider value={currentUser} className='app'>
-            <Nav loggedIn={loggedin} setCurrentUser={setCurrentUser} />
-            <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                <SavedNews setPublicArticles={setArticles} />
-            </ProtectedRoute>
-            <Route exact path={['/','/signin','/signup']}>
-                <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
-                <Main 
-                    loggedIn={loggedin} 
-                    spinner={spinner} 
-                    articles={articles} 
-                    keyWord={keyWord || savedKeyword} 
-                    articleServerErr={articleServerErr}
-                    index={index}
-                    setIndex={setIndex}
-                    setArticles={setArticles} />
-                <About />
-                <Footer />
-                <PopupWithForm setCurrentUser={setCurrentUser} />
-            </Route>
-            <Redirect to='/' />
-        </CurrentUserContext.Provider>
+        <div className='app'>
+            <CurrentUserContext.Provider value={currentUser}>
+                <Nav loggedIn={loggedin} setCurrentUser={setCurrentUser} />
+                <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
+                    <SavedNews setPublicArticles={setArticles} />
+                </ProtectedRoute>
+                <Route exact path={['/','/signin','/signup']}>
+                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
+                    <Main 
+                        loggedIn={loggedin} 
+                        spinner={spinner} 
+                        articles={articles} 
+                        keyWord={keyWord || savedKeyword} 
+                        articleServerErr={articleServerErr}
+                        index={index}
+                        setIndex={setIndex}
+                        setArticles={setArticles} />
+                    <About />
+                    <Footer />
+                    <PopupWithForm setCurrentUser={setCurrentUser} />
+                </Route>
+                <Redirect to='/' />
+            </CurrentUserContext.Provider>
+        </div>
     )
 }
 
