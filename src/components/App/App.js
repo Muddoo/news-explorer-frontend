@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Redirect, Route } from 'react-router-dom'
+import { checkToken } from '../../utils/auth'
 import './App.css'
 import Nav from '../Nav/Nav.js'
 import Header from '../Header/Header.js'
@@ -39,20 +40,30 @@ function App() {
     }, [keyWord])
 
     useEffect(() => {
-        if(currentUser || localStorage.getItem('token')) {
-            const storedArticles = JSON.parse(localStorage.getItem('articles'));
+        const token = localStorage.getItem('token')
+        const storedArticles = JSON.parse(localStorage.getItem('articles'));
+        if(currentUser) {
             setLoggedin(true);
             setArticles(storedArticles?.slice(1) || []);
             setSavedKeyword(storedArticles?.[0].keyWord);
-            storedArticles && setIndex(1)
-        }
-        else {
+            storedArticles && !index && setIndex(1)
+        }  
+        if(!token && !currentUser) {
             setLoggedin(false)
             setArticles([])
             setKeyWord()
             setSavedKeyword()
             setIndex()
             localStorage.removeItem('articles')
+        }
+        if(token && !currentUser) {
+            checkToken(token)
+            .then(user => setCurrentUser({...user, token}))
+            .catch(err => {
+                console.log(err);
+                setCurrentUser(false)
+                localStorage.removeItem('token')
+            })
         }
     },[currentUser])
 

@@ -1,6 +1,6 @@
 // const BASE_URL = 'https://register.nomoreparties.co'
-// const BASE_URL = 'http://localhost:3001'
-const BASE_URL = 'https://obscure-island-11341.herokuapp.com'
+const BASE_URL = 'http://localhost:3001'
+// const BASE_URL = 'https://obscure-island-11341.herokuapp.com'
 
 export const register = (password, email, name) => {
     return fetch(`${BASE_URL}/signup`, {

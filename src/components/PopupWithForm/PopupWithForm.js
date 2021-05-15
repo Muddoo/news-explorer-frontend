@@ -28,18 +28,6 @@ function PopupWithForm({ setCurrentUser }) {
         }
     },[currentPath, currentUser])
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        token &&
-        checkToken(token)
-            .then(user => setCurrentUser({...user, token}))
-            .catch(err => {
-                console.log(err);
-                setCurrentUser(false)
-                localStorage.removeItem('token')
-            })
-    }, [])
-
     function handleToggle(e) {
         if(e.target === e.currentTarget) {
             setIsOpen(!isOpen)

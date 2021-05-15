@@ -11,8 +11,8 @@ function SavedNews({ setPublicArticles }) {
     const [savedKeywords, setSavedKeywords] = useState([])
 
     const mainAPi = new MainApi({
-        baseUrl: 'https://obscure-island-11341.herokuapp.com',
-        // baseUrl: 'http://localhost:3001',
+        // baseUrl: 'https://obscure-island-11341.herokuapp.com',
+        baseUrl: 'http://localhost:3001',
         options: {
             headers: {
               authorization: `Bearer ${currentUser?.token}`,

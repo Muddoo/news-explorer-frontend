@@ -1,7 +1,7 @@
 .main {
     background-color: #F5F6F7;
     padding: 0;
-    transition: padding .3s, padding-left 0s, padding-right 0s, padding-top .2s;
+    transition: padding .3s, padding-left 0s, padding-right 0s, padding-top .15s;
 }
 
 .main_open {
