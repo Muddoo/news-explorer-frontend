@@ -18,7 +18,6 @@ function App() {
     const [loggedin, setLoggedin] = useState(true)
     const [spinner, setSpinner] = useState(false)
     const [keyWord, setKeyWord] = useState()
-    const [savedKeyword, setSavedKeyword] = useState()
     const [articleServerErr, setArticleServerErr] = useState(false)
     const [index, setIndex] = useState(0)
     const [currentUser,setCurrentUser] = useState()
@@ -58,7 +57,7 @@ function App() {
         if(currentUser) {
             setLoggedin(true);
             setArticles(storedArticles?.slice(1) || []);
-            setSavedKeyword(storedArticles?.[0].keyWord);
+            setKeyWord(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
             mainAPi.getArticles()
             .then(articles => setSavedArticles(articles))
@@ -68,7 +67,6 @@ function App() {
             setLoggedin(false)
             setArticles([])
             setKeyWord()
-            setSavedKeyword()
             setIndex()
             localStorage.removeItem('articles')
         }
@@ -84,14 +82,14 @@ function App() {
     },[currentUser])
 
     useEffect(() => {
-        if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]));
+        if(articles.length && keyWord) localStorage.setItem('articles', JSON.stringify([{ keyWord }, ...articles]));
     },[articles]);
 
     async function toggleArticle(article) {
         const method = article._id ? 'DELETE' : 'POST'
         const id = article._id || ''
         const body = {
-            keyword: keyWord || savedKeyword,
+            keyword: keyWord,
             title: article.title,
             text: article.content,
             date: new Date(article.publishedAt).toLocaleDateString('en',{month: 'long', day: 'numeric', year: "numeric"}),
@@ -127,7 +125,7 @@ function App() {
                         loggedIn={loggedin} 
                         spinner={spinner} 
                         articles={articles} 
-                        keyWord={keyWord || savedKeyword} 
+                        keyWord={keyWord} 
                         articleServerErr={articleServerErr}
                         index={index}
                         setIndex={setIndex}
