@@ -113,8 +113,7 @@ function App() {
             console.log(error)
         }
     }
-    console.log(articles)
-    console.log(keyWord)
+    
     return (
         <Switch className='app'>
             <CurrentUserContext.Provider value={currentUser}>
