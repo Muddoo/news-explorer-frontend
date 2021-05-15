@@ -1,5 +1,5 @@
 import './Nav.css'
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
@@ -14,6 +14,15 @@ function Nav({ setCurrentUser, loggedin, setLoggedin }) {
         setCurrentUser(false)
         setLoggedin(false)
     }
+
+    function exit(e) {
+        !/nav/gi.test(e.target.classList) && setOpen(false)
+    }
+    useEffect(() => {
+        console.log('exit')
+        window.addEventListener('click', exit);
+        return () => window.removeEventListener('click', exit)
+    }, [])
 
     return (
         <nav className={`nav ${open && 'nav_open'} ${isNewsRoute && 'nav_white'}`}>
