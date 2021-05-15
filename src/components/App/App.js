@@ -83,7 +83,8 @@ function App() {
     },[currentUser])
 
     useEffect(() => {
-        if(articles.length && keyWord) localStorage.setItem('articles', JSON.stringify([{ keyWord }, ...articles]));
+        console.log('art')
+        if(articles.length) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyWord }, ...articles]));
     },[articles]);
 
     async function toggleArticle(article) {
