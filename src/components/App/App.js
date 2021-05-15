@@ -18,6 +18,7 @@ function App() {
     const [loggedin, setLoggedin] = useState(true)
     const [spinner, setSpinner] = useState(false)
     const [keyWord, setKeyWord] = useState()
+    const [savedKeyWord, setSavedKeyWord] = useState()
     const [articleServerErr, setArticleServerErr] = useState(false)
     const [index, setIndex] = useState(0)
     const [currentUser,setCurrentUser] = useState()
@@ -57,7 +58,7 @@ function App() {
         if(currentUser) {
             setLoggedin(true);
             setArticles(storedArticles?.slice(1) || []);
-            setKeyWord(storedArticles?.[0].keyWord);
+            setSavedKeyWord(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
             mainAPi.getArticles()
             .then(articles => setSavedArticles(articles))
@@ -89,7 +90,7 @@ function App() {
         const method = article._id ? 'DELETE' : 'POST'
         const id = article._id || ''
         const body = {
-            keyword: keyWord,
+            keyword: keyWord || savedKeyWord,
             title: article.title,
             text: article.content,
             date: new Date(article.publishedAt).toLocaleDateString('en',{month: 'long', day: 'numeric', year: "numeric"}),
@@ -111,7 +112,8 @@ function App() {
             console.log(error)
         }
     }
-
+    console.log(articles)
+    console.log(keyWord)
     return (
         <Switch className='app'>
             <CurrentUserContext.Provider value={currentUser}>
@@ -129,8 +131,6 @@ function App() {
                         articleServerErr={articleServerErr}
                         index={index}
                         setIndex={setIndex}
-                        setArticles={setArticles}
-                        setPublicArticles={setSavedArticles}
                         toggleArticle={toggleArticle} />
                     <About />
                     <Footer />

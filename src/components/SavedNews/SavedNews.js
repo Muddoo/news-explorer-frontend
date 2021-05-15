@@ -4,7 +4,7 @@ import Footer from '../Footer/Footer.js'
 import { useState, useContext, useEffect } from 'react'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function SavedNews({ setPublicArticles, savedArticles, setSavedArticles, toggleArticle }) {
+function SavedNews({ savedArticles, toggleArticle }) {
     const currentUser = useContext(CurrentUserContext);
     const [savedKeywords, setSavedKeywords] = useState([])
 
@@ -25,7 +25,7 @@ function SavedNews({ setPublicArticles, savedArticles, setSavedArticles, toggleA
                     </div>
                 </div>
             </header>
-            <Main articles={savedArticles} setArticles={setSavedArticles} setPublicArticles={setPublicArticles} toggleArticle={toggleArticle} />
+            <Main articles={savedArticles} toggleArticle={toggleArticle} />
             <Footer />
         </div>
     )
