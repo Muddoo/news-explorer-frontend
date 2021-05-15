@@ -3,7 +3,7 @@ import { useState, useContext } from 'react'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Nav({ setCurrentUser, loggedin }) {
+function Nav({ setCurrentUser, loggedin, setLoggedin }) {
     const history = useHistory();
     const isNewsRoute = history.location.pathname.includes('saved-news');
     const [ open, setOpen ] = useState(false);
@@ -12,6 +12,7 @@ function Nav({ setCurrentUser, loggedin }) {
     function handleLogout() {
         localStorage.removeItem('token')
         setCurrentUser(false)
+        setLoggedin(false)
     }
 
     return (
