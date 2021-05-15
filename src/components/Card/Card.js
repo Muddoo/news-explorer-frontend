@@ -56,6 +56,7 @@ function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles }) {
             mainAPi.toggleArticle({body, method, id})
             .then((res) => {
                 setSaved(!isSaved)
+                method === 'POST' ? setPublicArticles(savedA => [...savedA, res]) : setPublicArticles(savedA => savedA.filter(a => a._id !== article._id))
                 article._id = res._id;
                 setArticles(articles => articles.map(a => a === article ? article : a))
             })

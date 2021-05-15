@@ -21,7 +21,7 @@ function Main({ loggedIn, spinner, articles, setArticles, setPublicArticles, key
                             <Card key={article._id} loggedIn={loggedIn} article={article} keyWord={article.keyword} setArticles={setArticles} setPublicArticles={setPublicArticles} />
                             )) :
                             articles.slice(0,index*3).map((article,i) => (
-                                <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} setArticles={setArticles} />
+                                <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} setArticles={setArticles} setPublicArticles={setPublicArticles} />
                             ))
                         }
                     </div> : 

@@ -12,16 +12,29 @@ import SavedNews from '../SavedNews/SavedNews.js'
 import newsApi from '../../utils/NewsApi.js'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute'
+import MainApi from  '../../utils/MainApi'
 
 function App() {
     const [loggedin, setLoggedin] = useState(true)
-    const [articles, setArticles] = useState([])
     const [spinner, setSpinner] = useState(false)
     const [keyWord, setKeyWord] = useState()
     const [savedKeyword, setSavedKeyword] = useState()
     const [articleServerErr, setArticleServerErr] = useState(false)
     const [index, setIndex] = useState(0)
     const [currentUser,setCurrentUser] = useState()
+    const [articles, setArticles] = useState([])
+    const [savedArticles, setSavedArticles] = useState([])
+
+    const mainAPi = new MainApi({
+        // baseUrl: 'https://obscure-island-11341.herokuapp.com',
+        baseUrl: 'http://localhost:3001',
+        options: {
+            headers: {
+              authorization: `Bearer ${currentUser?.token}`,
+              "Content-Type": "application/json",
+            }
+        }
+    })
     
     useEffect(() => {
         if(articleServerErr) setArticleServerErr(false)
@@ -47,6 +60,9 @@ function App() {
             setArticles(storedArticles?.slice(1) || []);
             setSavedKeyword(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
+            mainAPi.getArticles()
+            .then(articles => setSavedArticles(articles))
+            .catch(err => console.log(err))
         }  
         if(!token && !currentUser) {
             setLoggedin(false)
@@ -68,7 +84,7 @@ function App() {
     },[currentUser])
 
     useEffect(() => {
-        if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]))
+        if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]));
     },[articles])
     
     return (
@@ -76,10 +92,10 @@ function App() {
             <CurrentUserContext.Provider value={currentUser}>
                 <Nav setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                    <SavedNews setPublicArticles={setArticles} />
+                    <SavedNews setPublicArticles={setArticles} savedArticles={savedArticles} setSavedArticles={setSavedArticles} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
-                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
+                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} setSavedArticles={setSavedArticles} />
                     <Main 
                         loggedIn={loggedin} 
                         spinner={spinner} 
@@ -88,7 +104,8 @@ function App() {
                         articleServerErr={articleServerErr}
                         index={index}
                         setIndex={setIndex}
-                        setArticles={setArticles} />
+                        setArticles={setArticles}
+                        setPublicArticles={setSavedArticles} />
                     <About />
                     <Footer />
                     <PopupWithForm setCurrentUser={setCurrentUser} />

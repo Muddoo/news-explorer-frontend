@@ -5,26 +5,26 @@ import { useState, useContext, useEffect } from 'react'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 import MainApi from  '../../utils/MainApi'
 
-function SavedNews({ setPublicArticles }) {
+function SavedNews({ setPublicArticles, savedArticles, setSavedArticles }) {
     const currentUser = useContext(CurrentUserContext);
-    const [savedArticles, setSavedArticles] = useState([]);
+    // const [savedArticles, setSavedArticles] = useState([]);
     const [savedKeywords, setSavedKeywords] = useState([])
 
-    const mainAPi = new MainApi({
-        // baseUrl: 'https://obscure-island-11341.herokuapp.com',
-        baseUrl: 'http://localhost:3001',
-        options: {
-            headers: {
-              authorization: `Bearer ${currentUser?.token}`,
-              "Content-Type": "application/json",
-            }
-        }
-    })
-    useEffect(() => {
-        mainAPi.getArticles()
-            .then(articles => setSavedArticles(articles))
-            .catch(err => console.log(err))
-    }, [])
+    // const mainAPi = new MainApi({
+    //     // baseUrl: 'https://obscure-island-11341.herokuapp.com',
+    //     baseUrl: 'http://localhost:3001',
+    //     options: {
+    //         headers: {
+    //           authorization: `Bearer ${currentUser?.token}`,
+    //           "Content-Type": "application/json",
+    //         }
+    //     }
+    // })
+    // useEffect(() => {
+    //     mainAPi.getArticles()
+    //         .then(articles => setSavedArticles(articles))
+    //         .catch(err => console.log(err))
+    // }, [])
 
     useEffect(() => {
         const keywords = [... new Set(savedArticles.map(({keyword}) => keyword))];
