@@ -1,21 +1,14 @@
 import './SearchForm.css'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 function SearchForm({ setSpinner, setKeyWord }) {
     const [value, setValue] = useState('');
     const [err, setErr] = useState('');
-    // const [submit, setSubmit] = useState(false)
-
-    // useEffect(() => {
-    //     if( value || submit ) setSpinner(true);
-    //     if(!value && !submit) setSpinner(false)
-    // }, [value, submit])
 
     function handleChange(e) {
         setErr('');
         setKeyWord('')
         setValue(e.target.value);
-        // setSubmit(false)
     }
     function handleSubmit(e) {
         e.preventDefault();
@@ -23,7 +16,6 @@ function SearchForm({ setSpinner, setKeyWord }) {
         else {
             setKeyWord(value);
             setSpinner(true)
-            // setSubmit(true)
         }
         return setValue('')
     }
