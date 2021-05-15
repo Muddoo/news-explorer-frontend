@@ -83,7 +83,6 @@ function App() {
     },[currentUser])
 
     useEffect(() => {
-        console.log('art')
         if(articles.length) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyWord }, ...articles]));
     },[articles]);
 
@@ -113,7 +112,7 @@ function App() {
             console.log(error)
         }
     }
-    
+
     return (
         <Switch className='app'>
             <CurrentUserContext.Provider value={currentUser}>
