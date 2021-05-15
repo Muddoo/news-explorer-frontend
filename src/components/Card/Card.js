@@ -4,13 +4,13 @@ import { useHistory } from 'react-router-dom'
 import MainApi from  '../../utils/MainApi'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles }) {
+function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news');
     const [isSaved, setSaved] = useState()
     const currentUser = useContext(CurrentUserContext)
 
-    useEffect(() => setSaved(article._id),[article])
+    useEffect(() => setSaved(article._id) ,[article])
 
     const mainAPi = new MainApi({
         // baseUrl: 'https://obscure-island-11341.herokuapp.com',
@@ -23,45 +23,49 @@ function Card({ loggedIn, article, setArticles, keyWord, setPublicArticles }) {
         }
     })
 
+    // function handleClick() {
+
+    //     if(isNews) {
+    //         mainAPi.toggleArticle({id: article._id, method: 'DELETE'})
+    //         .then(() => {
+    //             setArticles(articles => articles.filter(a => article._id !== a._id))
+    //             setPublicArticles(articles => articles.map(a => {
+    //                 if(a._id === article._id) {
+    //                     a._id = null;
+    //                     return a
+    //                 }
+    //                 return a
+    //             }))
+    //         })
+    //         .catch(err => console.log(err))
+    //         return
+    //     }
+
+    //     if(currentUser) {
+    //         const body = {
+    //             keyword: keyWord,
+    //             title: article.title,
+    //             text: article.content,
+    //             date: formatDate(article.publishedAt),
+    //             source: article.source.name,
+    //             link: article.url,
+    //             image: article.urlToImage || 'Group.svg',
+    //         }
+    //         const method = isSaved ? 'DELETE' : 'POST';
+    //         const id = isSaved ? article._id : ''
+    //         mainAPi.toggleArticle({body, method, id})
+    //         .then((res) => {
+    //             setSaved(!isSaved)
+    //             method === 'POST' ? setPublicArticles(savedA => [...savedA, res]) : setPublicArticles(savedA => savedA.filter(a => a._id !== article._id))
+    //             article._id = res._id;
+    //             setArticles(articles => articles.map(a => a === article ? article : a))
+    //         })
+    //         .catch(err => console.log(err))
+    //     }
+    // }
+
     function handleClick() {
-
-        if(isNews) {
-            mainAPi.toggleArticle({id: article._id, method: 'DELETE'})
-            .then(() => {
-                setArticles(articles => articles.filter(a => article._id !== a._id))
-                setPublicArticles(articles => articles.map(a => {
-                    if(a._id === article._id) {
-                        a._id = null;
-                        return a
-                    }
-                    return a
-                }))
-            })
-            .catch(err => console.log(err))
-            return
-        }
-
-        if(currentUser) {
-            const body = {
-                keyword: keyWord,
-                title: article.title,
-                text: article.content,
-                date: formatDate(article.publishedAt),
-                source: article.source.name,
-                link: article.url,
-                image: article.urlToImage || 'Group.svg',
-            }
-            const method = isSaved ? 'DELETE' : 'POST';
-            const id = isSaved ? article._id : ''
-            mainAPi.toggleArticle({body, method, id})
-            .then((res) => {
-                setSaved(!isSaved)
-                method === 'POST' ? setPublicArticles(savedA => [...savedA, res]) : setPublicArticles(savedA => savedA.filter(a => a._id !== article._id))
-                article._id = res._id;
-                setArticles(articles => articles.map(a => a === article ? article : a))
-            })
-            .catch(err => console.log(err))
-        }
+        toggleArticle(article)
     }
 
     function formatDate(date) {

@@ -3,7 +3,7 @@ import { useState, useContext } from 'react'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Nav({ setCurrentUser }) {
+function Nav({ setCurrentUser, loggedin }) {
     const history = useHistory();
     const isNewsRoute = history.location.pathname.includes('saved-news');
     const [ open, setOpen ] = useState(false);
@@ -21,7 +21,7 @@ function Nav({ setCurrentUser }) {
                 <button className="nav__icon" onClick={() => setOpen(!open)} />
                 <div className='nav__list'>
                     <NavLink exact to='/' className='nav__link' activeClassName='nav__link_active'>Home</NavLink>
-                    { currentUser ? 
+                    { (currentUser || loggedin) ? 
                         <>
                             <NavLink to='/saved-news' className='nav__link' activeClassName='nav__link_active'>
                                 Saved articles

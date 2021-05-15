@@ -5,7 +5,7 @@ import { useState, useContext, useEffect } from 'react'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 import MainApi from  '../../utils/MainApi'
 
-function SavedNews({ setPublicArticles, savedArticles, setSavedArticles }) {
+function SavedNews({ setPublicArticles, savedArticles, setSavedArticles, toggleArticle }) {
     const currentUser = useContext(CurrentUserContext);
     // const [savedArticles, setSavedArticles] = useState([]);
     const [savedKeywords, setSavedKeywords] = useState([])
@@ -43,7 +43,7 @@ function SavedNews({ setPublicArticles, savedArticles, setSavedArticles }) {
                     </div>
                 </div>
             </header>
-            <Main articles={savedArticles} setArticles={setSavedArticles} setPublicArticles={setPublicArticles} />
+            <Main articles={savedArticles} setArticles={setSavedArticles} setPublicArticles={setPublicArticles} toggleArticle={toggleArticle} />
             <Footer />
         </div>
     )

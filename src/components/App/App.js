@@ -57,7 +57,7 @@ function App() {
         const storedArticles = JSON.parse(localStorage.getItem('articles'));
         if(currentUser) {
             setLoggedin(true);
-            setArticles(storedArticles?.slice(1) || []);
+            setArticles(storedArticles?.slice(1,3) || []);
             setSavedKeyword(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
             mainAPi.getArticles()
@@ -85,14 +85,42 @@ function App() {
 
     useEffect(() => {
         if(articles && (keyWord || savedKeyword)) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyword }, ...articles]));
-    },[articles])
-    
+    },[articles]);
+
+    async function toggleArticle(article) {
+        const method = article._id ? 'DELETE' : 'POST'
+        const id = article._id || ''
+        const body = {
+            keyword: keyWord || savedKeyword,
+            title: article.title,
+            text: article.content,
+            date: new Date(article.publishedAt).toLocaleDateString('en',{month: 'long', day: 'numeric', year: "numeric"}),
+            source: article.source.name,
+            link: article.url,
+            image: article.urlToImage || 'Group.svg',
+        }
+        try {
+            const response = await mainAPi.toggleArticle({id, method, body})
+            if(method === 'POST') {
+                // article._id = response._id;
+                setArticles(articles.map(a => a === article ? {...article, _id: response._id} : a))
+                setSavedArticles([...savedArticles, response])
+            } else {
+                setArticles(articles.map(a => a._id === article._id ? {...a, _id: null} : a))
+                setSavedArticles(savedArticles.filter(a => a._id !== article._id))
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <Switch className='app'>
             <CurrentUserContext.Provider value={currentUser}>
-                <Nav setCurrentUser={setCurrentUser} />
+                <Nav loggedin={loggedin} setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                    <SavedNews setPublicArticles={setArticles} savedArticles={savedArticles} setSavedArticles={setSavedArticles} />
+                    <SavedNews setPublicArticles={setArticles} savedArticles={savedArticles} setSavedArticles={setSavedArticles} toggleArticle={toggleArticle} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
                     <Header setSpinner={setSpinner} setKeyWord={setKeyWord} setSavedArticles={setSavedArticles} />
@@ -105,7 +133,8 @@ function App() {
                         index={index}
                         setIndex={setIndex}
                         setArticles={setArticles}
-                        setPublicArticles={setSavedArticles} />
+                        setPublicArticles={setSavedArticles}
+                        toggleArticle={toggleArticle} />
                     <About />
                     <Footer />
                     <PopupWithForm setCurrentUser={setCurrentUser} />
