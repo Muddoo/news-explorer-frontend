@@ -3,7 +3,7 @@ import { useState, useContext } from 'react'
 import { NavLink, useHistory, withRouter } from 'react-router-dom'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function Nav({ loggedIn, setCurrentUser }) {
+function Nav({ setCurrentUser }) {
     const history = useHistory();
     const isNewsRoute = history.location.pathname.includes('saved-news');
     const [ open, setOpen ] = useState(false);

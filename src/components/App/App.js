@@ -74,7 +74,7 @@ function App() {
     return (
         <Switch className='app'>
             <CurrentUserContext.Provider value={currentUser}>
-                <Nav loggedIn={loggedin} setCurrentUser={setCurrentUser} />
+                <Nav setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
                     <SavedNews setPublicArticles={setArticles} />
                 </ProtectedRoute>
