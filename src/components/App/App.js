@@ -26,8 +26,8 @@ function App() {
     const [savedArticles, setSavedArticles] = useState([])
 
     const mainAPi = new MainApi({
-        // baseUrl: 'https://obscure-island-11341.herokuapp.com',
-        baseUrl: 'http://localhost:3001',
+        baseUrl: 'https://obscure-island-11341.herokuapp.com',
+        // baseUrl: 'http://localhost:3001',
         options: {
             headers: {
               authorization: `Bearer ${currentUser?.token}`,
@@ -57,7 +57,7 @@ function App() {
         const storedArticles = JSON.parse(localStorage.getItem('articles'));
         if(currentUser) {
             setLoggedin(true);
-            setArticles(storedArticles?.slice(1,3) || []);
+            setArticles(storedArticles?.slice(1) || []);
             setSavedKeyword(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
             mainAPi.getArticles()
@@ -102,7 +102,6 @@ function App() {
         try {
             const response = await mainAPi.toggleArticle({id, method, body})
             if(method === 'POST') {
-                // article._id = response._id;
                 setArticles(articles.map(a => a === article ? {...article, _id: response._id} : a))
                 setSavedArticles([...savedArticles, response])
             } else {

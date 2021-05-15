@@ -33,13 +33,11 @@
     row-gap: 16px;
     justify-content: center;
     margin-bottom: 64px;
-    /* justify-items: right; */
 }
 
 .main__button {
     all: unset;
     margin: 0 auto 20px;
-    /* margin: 64px auto 20px; */
     background: #FFFFFF;
     border-radius: 80px;
     width: 288px;
@@ -79,7 +77,6 @@
     .main__button {
         width: 240px;
         height: 56px;
-        /* margin-top: 32px; */
     }
 }
 
@@ -97,6 +94,5 @@
     }
     .main__button {
         width: 100%;
-        /* margin-top: 15px; */
     }
 }

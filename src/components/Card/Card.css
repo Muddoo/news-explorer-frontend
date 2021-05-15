@@ -8,7 +8,7 @@
     display: grid;
     grid-template-rows: max-content;
     grid-auto-rows: auto;
-    /* cursor: pointer; */
+    cursor: pointer;
 }
 
 .card__link {
@@ -169,8 +169,6 @@
     padding: 8px 20px;
     white-space: nowrap;
     text-transform: capitalize;
-    /* width: 87px;
-    height: 40px; */
 }
 
 .card__delete {
