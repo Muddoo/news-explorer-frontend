@@ -92,7 +92,7 @@ function App() {
         const body = {
             keyword: keyWord || savedKeyWord,
             title: article.title,
-            text: article.content,
+            text: article.description,
             date: new Date(article.publishedAt).toLocaleDateString('en',{month: 'long', day: 'numeric', year: "numeric"}),
             source: article.source.name,
             link: article.url,
