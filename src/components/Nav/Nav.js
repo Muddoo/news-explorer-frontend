@@ -19,7 +19,6 @@ function Nav({ setCurrentUser, loggedin, setLoggedin }) {
         !/nav/gi.test(e.target.classList) && setOpen(false)
     }
     useEffect(() => {
-        console.log('exit')
         window.addEventListener('click', exit);
         return () => window.removeEventListener('click', exit)
     }, [])
