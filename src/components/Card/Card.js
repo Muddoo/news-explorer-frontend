@@ -20,7 +20,7 @@ function Card({ loggedIn, article, keyWord, toggleArticle }) {
                 <div className="card__body">
                     <p className="card__date">{isNews ? article.date : formatDate(article.publishedAt)}</p>
                     <p className='card__heading'>{article.title}</p>
-                    <p className="card__text">{isNews ? article.text : article.content}</p>
+                    <p className="card__text">{isNews ? article.text : article.description}</p>
                     <p className="card__footer">{isNews ? article.source : article.source.name}</p>
                 </div>
                 {isNews && <p className="card__keyword">{keyWord}</p>}
