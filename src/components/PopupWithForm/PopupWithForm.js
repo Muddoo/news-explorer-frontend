@@ -38,11 +38,13 @@ function PopupWithForm({ setCurrentUser }) {
     function handleSubmit(e) {
         e.preventDefault();
         const { password, email, name } = fields;
+        setServerError('Loading...')
 
         if(currentPath.includes('signin')) {
 
             authorize(password, email)
                 .then(async token => {
+                    setServerError();
                     localStorage.setItem('token', token);
                     setCurrentUser({... await checkToken(token), token});
                     setIsOpen(false);
@@ -57,7 +59,10 @@ function PopupWithForm({ setCurrentUser }) {
         }
 
         register(password, email, name)
-            .then(() => setTooltip(true))
+            .then(() => {
+                setServerError();
+                setTooltip(true)
+            })
             .catch(err => {
                 console.log(err);
                 const errMsg = err.validation ? err.validation.body.message : 'Duplicate Email either sign in or signup with different email'
