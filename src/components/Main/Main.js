@@ -3,10 +3,23 @@ import Card from '../Card/Card.js'
 import { useHistory } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
+import { useMemo, useState } from 'react'
 
 function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
+    const  [art, setArt] = useState([])
+    const memo = useMemo(() => {
+         Promise.all(articles.map(a => new Promise((res,rej) => {
+            const img = new Image();
+            img.src = a.urlToImage;
+            img.onload = res;
+            img.onerror = rej
+        }))). then(res => {
+            // console.log(res);
+            setArt(articles)
+        })
+    }, [articles])
     
     return (
         <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>

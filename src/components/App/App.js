@@ -24,6 +24,7 @@ function App() {
     const [currentUser,setCurrentUser] = useState()
     const [articles, setArticles] = useState([])
     const [savedArticles, setSavedArticles] = useState([])
+    const [savedKeywords, setSavedKeywords] = useState()
 
     const mainAPi = new MainApi({
         baseUrl: 'https://obscure-island-11341.herokuapp.com',
@@ -39,6 +40,9 @@ function App() {
     useEffect(() => {
         if(articleServerErr) setArticleServerErr(false)
         if(keyWord) {
+            setSpinner(true)
+            setArticles([])
+            setIndex(0)
             newsApi.searchArticles(keyWord)
             .then(res => {
                 setArticles(res.articles)
@@ -86,6 +90,12 @@ function App() {
         if(articles.length) localStorage.setItem('articles', JSON.stringify([{ keyWord: keyWord || savedKeyWord }, ...articles]));
     },[articles]);
 
+    useEffect(() => {
+        const keywords = [... new Set(savedArticles.map(({keyword}) => keyword))];
+        const keywordText = keywords.slice(0,2).join(', ') + (keywords.length > 2 ? `, and ${keywords.length-2} others` : '');
+        setSavedKeywords(keywordText)
+    },[savedArticles])
+
     async function toggleArticle(article) {
         const method = article._id ? 'DELETE' : 'POST'
         const id = article._id || ''
@@ -118,10 +128,10 @@ function App() {
             <CurrentUserContext.Provider value={currentUser}>
                 <Nav loggedin={loggedin} setLoggedin={setLoggedin} setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                    <SavedNews savedArticles={savedArticles} toggleArticle={toggleArticle} />
+                    <SavedNews savedArticles={savedArticles} savedKeywords={savedKeywords} toggleArticle={toggleArticle} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
-                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
+                    <Header setKeyWord={setKeyWord} />
                     <Main 
                         loggedIn={loggedin} 
                         spinner={spinner} 
