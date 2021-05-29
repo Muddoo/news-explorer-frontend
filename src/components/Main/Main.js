@@ -3,23 +3,48 @@ import Card from '../Card/Card.js'
 import { useHistory } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
-import { useMemo, useState } from 'react'
+import { useState, useMemo } from 'react'
 
 function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
-    const  [art, setArt] = useState([])
+    const  [preloadArticles, setPreloadArticles] = useState([])
+
     const memo = useMemo(() => {
          Promise.all(articles.map(a => new Promise((res,rej) => {
             const img = new Image();
-            img.src = a.urlToImage;
+            img.src = a.image || a.urlToImage || 'Group.svg';
             img.onload = res;
             img.onerror = rej
         }))). then(res => {
-            // console.log(res);
-            setArt(articles)
+            console.log(res);
+            setPreloadArticles(articles)
         })
     }, [articles])
+
+    // const memo = useMemo(() => {
+    //      Promise.all(articles.map(a => new Promise((res,rej) => {
+    //         const img = new Image();
+    //         img.src = a.image || a.urlToImage || 'Group.svg';
+    //         img.onload = res;
+    //         img.onerror = rej
+    //     }))). then(res => {
+    //         console.log(res);
+    //         setArt(articles)
+    //     })
+    // }, [articles])
+
+    // const loadArticles = (articles = []) => Promise.all(articles.map((a,i) => new Promise((res,rej) => {
+    //     const img = new Image();
+    //     if(i < 3) {
+    //         console.log(a.urlToImage)
+    //         img.onload = () => res(a);
+    //         img.onerror = rej
+    //         img.src = a.image || a.urlToImage || 'Group.svg';
+    //         return;
+    //     }
+    //     res(a)
+    // })))
     
     return (
         <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>
@@ -30,10 +55,10 @@ function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, s
                 {articles?.length ?
                     <div className="main__list">
                         {isNews ?
-                            articles.map((article) => (
+                            preloadArticles.map((article) => (
                             <Card key={article._id} loggedIn={loggedIn} article={article} keyWord={article.keyword} toggleArticle={toggleArticle} />
                             )) :
-                            articles.slice(0,index*3).map((article,i) => (
+                            preloadArticles.slice(0,index*3).map((article,i) => (
                                 <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} toggleArticle={toggleArticle} />
                             ))
                         }

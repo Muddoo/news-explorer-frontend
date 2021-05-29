@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import { Redirect, Route,Switch } from 'react-router-dom'
 import { checkToken } from '../../utils/auth'
 import './App.css'
@@ -35,7 +35,19 @@ function App() {
               "Content-Type": "application/json",
             }
         }
-    })
+    }) 
+
+    const loadArticles = useCallback((articles = []) => Promise.all(articles.map((a,i) => new Promise((res,rej) => {
+        const img = new Image();
+        img.src = a.image || a.urlToImage || 'Group.svg';
+        // if(i < 3) {
+            console.log(a.urlToImage)
+            img.onload = () => res(a);
+            img.onerror = rej
+            return;
+        // }
+        // res(a)
+    })))) 
     
     useEffect(() => {
         if(articleServerErr) setArticleServerErr(false)
@@ -45,6 +57,7 @@ function App() {
             setIndex(0)
             newsApi.searchArticles(keyWord)
             .then(res => {
+                // const loadedArticles = await loadArticles(res.articles)    
                 setArticles(res.articles)
                 setIndex(1)
             })
@@ -61,11 +74,16 @@ function App() {
         const storedArticles = JSON.parse(localStorage.getItem('articles'));
         if(currentUser) {
             setLoggedin(true);
+            // setArticles(loadArticles(storedArticles?.slice(1)))
+            // loadArticles(storedArticles?.slice(1)).then(articles => setArticles(articles))
             setArticles(storedArticles?.slice(1) || []);
             setSavedKeyWord(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
             mainAPi.getArticles()
-            .then(articles => setSavedArticles(articles))
+            .then(articles => {
+                // const loadedArticles = await loadArticles(articles)
+                setSavedArticles(articles)
+            })
             .catch(err => console.log(err))
         }  
         if(!token && !currentUser) {
