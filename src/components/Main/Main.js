@@ -13,7 +13,7 @@ function Main({ loggedIn, spinner, setSpinner, articles, keyWord, articleServerE
 
     useEffect(() => {
         let unsubscribe = false;
-        setSpinner(true)
+        articles.length && setSpinner(true)
         Promise.all(articles.map(a => new Promise((res,rej) => {
             const img = new Image();
             img.src = a.image || a.urlToImage || 'Group.svg';
