@@ -3,14 +3,14 @@ import Card from '../Card/Card.js'
 import { useHistory } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 
 function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
     const  [preloadArticles, setPreloadArticles] = useState([])
 
-    const memo = useMemo(() => {
+    useEffect(() => {
          Promise.all(articles.map(a => new Promise((res,rej) => {
             const img = new Image();
             img.src = a.image || a.urlToImage || 'Group.svg';
