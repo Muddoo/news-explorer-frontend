@@ -5,7 +5,7 @@ import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
 import { useState, useMemo, useEffect } from 'react'
 
-function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
+function Main({ loggedIn, spinner, setSpinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
     const  [preloadArticles, setPreloadArticles] = useState([])
@@ -21,6 +21,8 @@ function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, s
             setPreloadArticles(articles)
         })
     }, [articles])
+
+    useEffect(() => preloadArticles.length && setSpinner(false), [preloadArticles])
 
     // const memo = useMemo(() => {
     //      Promise.all(articles.map(a => new Promise((res,rej) => {
@@ -50,7 +52,7 @@ function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, s
         <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>
             <div className="main__container">
                 { spinner && <PreLoader /> }
-                {(!isNews && articles?.length) ? <h2 className="main__title">Search results</h2> : null}
+                {(!isNews && preloadArticles.length) ? <h2 className="main__title">Search results</h2> : null}
 
                 {articles?.length ?
                     <div className="main__list">
@@ -65,7 +67,7 @@ function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, s
                     </div> : 
                     null}
                     
-                {(!isNews && articles?.length && index*3 <= articles?.length) ?
+                {(!isNews && preloadArticles.length && index*3 <= articles?.length) ?
                     <button className='main__button' type='button' onClick={() => setIndex(index+1)}>
                         Show more
                     </button> :

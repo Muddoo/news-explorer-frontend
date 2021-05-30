@@ -65,7 +65,7 @@ function App() {
                 console.log(err);
                 setArticleServerErr(true)
             })
-            .finally(() => setSpinner(false))
+            // .finally(() => setSpinner(false))
         }
     }, [keyWord])
 
@@ -146,13 +146,18 @@ function App() {
             <CurrentUserContext.Provider value={currentUser}>
                 <Nav loggedin={loggedin} setLoggedin={setLoggedin} setCurrentUser={setCurrentUser} />
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
-                    <SavedNews savedArticles={savedArticles} savedKeywords={savedKeywords} toggleArticle={toggleArticle} />
+                    <SavedNews 
+                        savedArticles={savedArticles} 
+                        setSpinner={setSpinner}
+                        savedKeywords={savedKeywords} 
+                        toggleArticle={toggleArticle} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
                     <Header setKeyWord={setKeyWord} />
                     <Main 
                         loggedIn={loggedin} 
                         spinner={spinner} 
+                        setSpinner={setSpinner}
                         articles={articles} 
                         keyWord={keyWord} 
                         articleServerErr={articleServerErr}
