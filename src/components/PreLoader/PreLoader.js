@@ -1,10 +1,10 @@
 import './PreLoader.css'
 
-function PreLoader() {
+function PreLoader({ spinnerText }) {
     return (
         <div className="preloader">
             <i className="preloader__circle" />
-            <p className="preloader__text">Searching for news...</p>
+            <p className="preloader__text">{ spinnerText || 'Searching for news...' }</p>
         </div>
     )
 }

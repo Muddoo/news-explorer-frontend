@@ -17,6 +17,7 @@ import MainApi from  '../../utils/MainApi'
 function App() {
     const [loggedin, setLoggedin] = useState(true)
     const [spinner, setSpinner] = useState(false)
+    const [spinnerText, setSpinnerText] = useState();
     const [keyWord, setKeyWord] = useState()
     const [savedKeyWord, setSavedKeyWord] = useState()
     const [articleServerErr, setArticleServerErr] = useState(false)
@@ -53,11 +54,12 @@ function App() {
         if(articleServerErr) setArticleServerErr(false)
         if(keyWord) {
             setSpinner(true)
+            setSpinnerText()
             setArticles([])
             setIndex(0)
             newsApi.searchArticles(keyWord)
             .then(res => {
-                // const loadedArticles = await loadArticles(res.articles)    
+                // const loadedArticles = await loadArticles(res.articles)  
                 setArticles(res.articles)
                 setIndex(1)
             })
@@ -80,6 +82,7 @@ function App() {
             setSavedKeyWord(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
             storedArticles && setSpinner(true)
+            storedArticles && setSpinnerText('Loading Articles...')
             mainAPi.getArticles()
             .then(articles => {
                 // const loadedArticles = await loadArticles(articles)
@@ -92,6 +95,7 @@ function App() {
             setArticles([])
             setKeyWord()
             setIndex()
+            setSpinner()
             localStorage.removeItem('articles')
         }
         if(token && !currentUser) {
@@ -150,6 +154,7 @@ function App() {
                     <SavedNews 
                         savedArticles={savedArticles} 
                         spinner={spinner} 
+                        spinnerText={spinnerText}
                         setSpinner={setSpinner}
                         savedKeywords={savedKeywords} 
                         toggleArticle={toggleArticle} />
@@ -159,6 +164,7 @@ function App() {
                     <Main 
                         loggedIn={loggedin} 
                         spinner={spinner} 
+                        spinnerText={spinnerText}
                         setSpinner={setSpinner}
                         articles={articles} 
                         keyWord={keyWord} 

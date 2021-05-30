@@ -5,7 +5,7 @@ import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
 import { useState, useMemo, useEffect } from 'react'
 
-function Main({ loggedIn, spinner, setSpinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
+function Main({ loggedIn, spinner, spinnerText, setSpinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
     const  [preloadArticles, setPreloadArticles] = useState([])
@@ -59,7 +59,7 @@ function Main({ loggedIn, spinner, setSpinner, articles, keyWord, articleServerE
     return (
         <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>
             <div className="main__container">
-                { spinner && <PreLoader /> }
+                { spinner && <PreLoader spinnerText={ isNews ? 'Loading Your Articles...' : spinnerText } /> }
                 {(!isNews && preloadArticles.length) ? <h2 className="main__title">Search results</h2> : null}
 
                 {preloadArticles.length ?
