@@ -79,6 +79,7 @@ function App() {
             setArticles(storedArticles?.slice(1) || []);
             setSavedKeyWord(storedArticles?.[0].keyWord);
             storedArticles && !index && setIndex(1)
+            storedArticles && setSpinner(true)
             mainAPi.getArticles()
             .then(articles => {
                 // const loadedArticles = await loadArticles(articles)

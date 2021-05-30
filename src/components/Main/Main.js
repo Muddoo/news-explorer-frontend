@@ -54,7 +54,7 @@ function Main({ loggedIn, spinner, setSpinner, articles, keyWord, articleServerE
                 { spinner && <PreLoader /> }
                 {(!isNews && preloadArticles.length) ? <h2 className="main__title">Search results</h2> : null}
 
-                {articles?.length ?
+                {preloadArticles.length ?
                     <div className="main__list">
                         {isNews ?
                             preloadArticles.map((article) => (
