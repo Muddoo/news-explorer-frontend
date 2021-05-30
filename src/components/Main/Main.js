@@ -1,60 +1,36 @@
 import './Main.css'
 import Card from '../Card/Card.js'
-import { useHistory } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import NotFound from '../NotFound/NotFound.js'
 import PreLoader from '../PreLoader/PreLoader.js'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 function Main({ loggedIn, spinner, spinnerText, setSpinner, articles, keyWord, articleServerErr, index, setIndex, toggleArticle }) {
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
     const  [preloadArticles, setPreloadArticles] = useState([])
-    // let unsubscribe = false;
 
     useEffect(() => {
         let unsubscribe = false;
         articles.length && setSpinner(true)
+        preloadArticles.length && setPreloadArticles(articles)
+        !preloadArticles.length &&
         Promise.all(articles.map(a => new Promise((res,rej) => {
             const img = new Image();
             img.src = a.image || a.urlToImage || 'Group.svg';
             img.onload = res;
-            img.onerror = rej
-        }))). then(res => {
-            console.log(res);
-            console.log(unsubscribe);
-            !unsubscribe && setPreloadArticles(articles)
-        })
+            img.onerror = () => {
+                a.image = 'Group.svg';
+                res()
+            };
+        }))). then(() =>  !unsubscribe && setPreloadArticles(articles))
 
         return () => unsubscribe = true
     }, [articles])
 
     useEffect(() => preloadArticles.length && setSpinner(false), [preloadArticles])
-
-    // useEffect(() => () => unsubscribe = true, [])
-
-    // const memo = useMemo(() => {
-    //      Promise.all(articles.map(a => new Promise((res,rej) => {
-    //         const img = new Image();
-    //         img.src = a.image || a.urlToImage || 'Group.svg';
-    //         img.onload = res;
-    //         img.onerror = rej
-    //     }))). then(res => {
-    //         console.log(res);
-    //         setArt(articles)
-    //     })
-    // }, [articles])
-
-    // const loadArticles = (articles = []) => Promise.all(articles.map((a,i) => new Promise((res,rej) => {
-    //     const img = new Image();
-    //     if(i < 3) {
-    //         console.log(a.urlToImage)
-    //         img.onload = () => res(a);
-    //         img.onerror = rej
-    //         img.src = a.image || a.urlToImage || 'Group.svg';
-    //         return;
-    //     }
-    //     res(a)
-    // })))
+    useEffect(() => setPreloadArticles([]) ,[isNews])
+    console.log(preloadArticles)
     
     return (
         <div className={`main ${(spinner || articles?.length) && 'main_open'}`}>
