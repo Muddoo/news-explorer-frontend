@@ -149,6 +149,7 @@ function App() {
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
                     <SavedNews 
                         savedArticles={savedArticles} 
+                        spinner={spinner} 
                         setSpinner={setSpinner}
                         savedKeywords={savedKeywords} 
                         toggleArticle={toggleArticle} />

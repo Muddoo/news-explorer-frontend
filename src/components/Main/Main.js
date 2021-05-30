@@ -9,20 +9,28 @@ function Main({ loggedIn, spinner, setSpinner, articles, keyWord, articleServerE
     const history = useHistory();
     const isNews = history.location.pathname.includes('saved-news')
     const  [preloadArticles, setPreloadArticles] = useState([])
+    // let unsubscribe = false;
 
     useEffect(() => {
-         Promise.all(articles.map(a => new Promise((res,rej) => {
+        let unsubscribe = false;
+        setSpinner(true)
+        Promise.all(articles.map(a => new Promise((res,rej) => {
             const img = new Image();
             img.src = a.image || a.urlToImage || 'Group.svg';
             img.onload = res;
             img.onerror = rej
         }))). then(res => {
             console.log(res);
-            setPreloadArticles(articles)
+            console.log(unsubscribe);
+            !unsubscribe && setPreloadArticles(articles)
         })
+
+        return () => unsubscribe = true
     }, [articles])
 
     useEffect(() => preloadArticles.length && setSpinner(false), [preloadArticles])
+
+    // useEffect(() => () => unsubscribe = true, [])
 
     // const memo = useMemo(() => {
     //      Promise.all(articles.map(a => new Promise((res,rej) => {
