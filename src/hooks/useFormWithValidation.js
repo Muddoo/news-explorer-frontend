@@ -17,6 +17,7 @@ export function useFormWithValidation(setServerError) {
           setFields(newValues);
           setErrors(newErrors);
           setIsValid(newIsValid);
+          setServerError()
         },
         [setFields, setErrors, setIsValid]
     );

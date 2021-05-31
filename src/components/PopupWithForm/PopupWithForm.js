@@ -19,7 +19,6 @@ function PopupWithForm({ setCurrentUser }) {
     useEffect(() => {
         if(currentUser) return history.push('/');
         reset()
-        setServerError()
         if(/signin|signup/.test(currentPath)) setIsOpen(true); else setIsOpen(false);
         if(/signin|signup/.test(currentPath)) {
             setTxt(currentPath.replace('/sign',''));
@@ -38,6 +37,7 @@ function PopupWithForm({ setCurrentUser }) {
     function handleSubmit(e) {
         e.preventDefault();
         const { password, email, name } = fields;
+        setServerError('Loading...')
 
         if(currentPath.includes('signin')) {
 
