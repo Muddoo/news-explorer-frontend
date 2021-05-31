@@ -20,9 +20,9 @@ function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, s
                             articles.map((article) => (
                             <Card key={article._id} loggedIn={loggedIn} article={article} keyWord={article.keyword} toggleArticle={toggleArticle} />
                             )) :
-                            articles.slice(0,index*3).map((article,i) => (
+                            articles.map((article,i) => (
                                 <Card key={i} loggedIn={loggedIn} article={article} keyWord={keyWord} toggleArticle={toggleArticle} />
-                            ))
+                            )).slice(0,index*3)
                         }
                     </div> : 
                     null}
