@@ -39,8 +39,20 @@ function App() {
     useEffect(() => {
         if(articleServerErr) setArticleServerErr(false)
         if(keyWord) {
+            setArticles([])
+            setSpinner(true)
+            setIndex()
             newsApi.searchArticles(keyWord)
-            .then(res => {
+            .then(async res => {
+                await Promise.all(res.articles.map(a => new Promise((res,rej) => {
+                    const img = new Image()
+                    img.onload = res;
+                    img.onerror = () => {
+                        a.urlToImage = 'Group.svg'
+                        res()
+                    }
+                    img.src = a.urlToImage
+                })))
                 setArticles(res.articles)
                 setIndex(1)
             })
@@ -121,7 +133,7 @@ function App() {
                     <SavedNews savedArticles={savedArticles} toggleArticle={toggleArticle} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
-                    <Header setSpinner={setSpinner} setKeyWord={setKeyWord} />
+                    <Header setKeyWord={setKeyWord} />
                     <Main 
                         loggedIn={loggedin} 
                         spinner={spinner} 

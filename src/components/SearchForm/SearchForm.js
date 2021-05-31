@@ -1,7 +1,7 @@
 import './SearchForm.css'
 import { useState } from 'react'
 
-function SearchForm({ setSpinner, setKeyWord }) {
+function SearchForm({ setKeyWord }) {
     const [value, setValue] = useState('');
     const [err, setErr] = useState('');
 
@@ -13,12 +13,10 @@ function SearchForm({ setSpinner, setKeyWord }) {
     function handleSubmit(e) {
         e.preventDefault();
         if(!value.trim()) setErr(true);
-        else {
-            setKeyWord(value);
-            setSpinner(true)
-        }
+        else setKeyWord(value);
         return setValue('')
     }
+    
     return (
         <form 
             className="search" 
