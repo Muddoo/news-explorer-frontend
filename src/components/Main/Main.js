@@ -27,7 +27,7 @@ function Main({ loggedIn, spinner, articles, keyWord, articleServerErr, index, s
                     </div> : 
                     null}
                     
-                {(!isNews && articles?.length && index*3 <= articles?.length) ?
+                {(!isNews && articles?.length && index*3 < articles?.length) ?
                     <button className='main__button' type='button' onClick={() => setIndex(index+1)}>
                         Show more
                     </button> :
