@@ -4,7 +4,7 @@ import Footer from '../Footer/Footer.js'
 import { useContext } from 'react'
 import CurrentUserContext from '../../contexts/CurrentUserContext'
 
-function SavedNews({ savedArticles, savedKeywords, toggleArticle, spinner, spinnerText, setSpinner }) {
+function SavedNews({ savedArticles, savedKeywords, toggleArticle, spinner, spinnerText, setSpinner, index, isLoadedArticles, setIsLoadedArticles }) {
     const currentUser = useContext(CurrentUserContext);
 
     return (
@@ -23,7 +23,10 @@ function SavedNews({ savedArticles, savedKeywords, toggleArticle, spinner, spinn
                 toggleArticle={toggleArticle} 
                 spinner={spinner} 
                 spinnerText={spinnerText}
-                setSpinner={setSpinner} />
+                setSpinner={setSpinner}
+                index={index}
+                isLoadedArticles={isLoadedArticles}
+                setIsLoadedArticles={setIsLoadedArticles} />
             <Footer />
         </div>
     )

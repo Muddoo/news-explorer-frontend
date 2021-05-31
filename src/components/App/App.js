@@ -25,6 +25,8 @@ function App() {
     const [currentUser,setCurrentUser] = useState()
     const [articles, setArticles] = useState([])
     const [savedArticles, setSavedArticles] = useState([])
+    const [isLoadedArticles, setIsLoadedArticles] = useState(false)
+    const [isLoadedSavedArticles, setIsLoadedSavedArticles] = useState(false)
     const [savedKeywords, setSavedKeywords] = useState()
 
     const mainAPi = new MainApi({
@@ -134,11 +136,14 @@ function App() {
                 <ProtectedRoute path='/saved-news' loggedIn={currentUser}>
                     <SavedNews 
                         savedArticles={savedArticles} 
+                        isLoadedArticles={isLoadedSavedArticles}
+                        setIsLoadedArticles={setIsLoadedSavedArticles}
                         spinner={spinner} 
                         spinnerText={spinnerText}
                         setSpinner={setSpinner}
                         savedKeywords={savedKeywords} 
-                        toggleArticle={toggleArticle} />
+                        toggleArticle={toggleArticle}
+                        index={index} />
                 </ProtectedRoute>
                 <Route exact path={['/','/signin','/signup']}>
                     <Header setKeyWord={setKeyWord} />
@@ -148,6 +153,8 @@ function App() {
                         spinnerText={spinnerText}
                         setSpinner={setSpinner}
                         articles={articles} 
+                        isLoadedArticles={isLoadedArticles}
+                        setIsLoadedArticles={setIsLoadedArticles}
                         keyWord={keyWord} 
                         articleServerErr={articleServerErr}
                         index={index}
