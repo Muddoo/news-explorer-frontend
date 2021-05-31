@@ -20,7 +20,7 @@ function PopupWithForm({ setCurrentUser }) {
         if(currentUser) return history.push('/');
         reset()
         setServerError()
-        if(/signin|signup/.test(currentPath) && !isOpen) setIsOpen(true); else setIsOpen(false);
+        if(/signin|signup/.test(currentPath)) setIsOpen(true); else setIsOpen(false);
         if(/signin|signup/.test(currentPath)) {
             setTxt(currentPath.replace('/sign',''));
             setLink(currentPath.includes('signin') ? 'up' : 'in');
