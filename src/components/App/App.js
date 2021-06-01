@@ -46,9 +46,13 @@ function App() {
             .then(async res => {
                 await Promise.all(res.articles.map(a => new Promise((res,rej) => {
                     const img = new Image()
-                    img.onload = res;
+                    img.onload = () => {
+                        img.src = a.urlToImage;
+                        res()
+                    };
                     img.onerror = () => {
                         a.urlToImage = 'Group.svg'
+                        img.src = 'Group.svg'
                         res()
                     }
                     img.src = a.urlToImage
@@ -69,11 +73,42 @@ function App() {
         const storedArticles = JSON.parse(localStorage.getItem('articles'));
         if(currentUser) {
             setLoggedin(true);
-            setArticles(storedArticles?.slice(1) || []);
+            storedArticles &&
+            Promise.all(storedArticles.slice(1).map(a => new Promise((res,rej) => {
+                const img = new Image()
+                img.onload = () => {
+                    img.src = a.urlToImage;
+                    res()
+                };
+                img.onerror = () => {
+                    a.urlToImage = 'Group.svg'
+                    img.src = 'Group.svg'
+                    res()
+                }
+                img.src = a.urlToImage
+            })))
+            .then(() => {
+                setArticles(storedArticles?.slice(1))
+                setIndex(1)
+            });
             setSavedKeyWord(storedArticles?.[0].keyWord);
-            storedArticles && !index && setIndex(1)
             mainAPi.getArticles()
-            .then(articles => setSavedArticles(articles))
+            .then(async articles => {
+                await Promise.all(articles.map(a => new Promise((res,rej) => {
+                    const img = new Image()
+                    img.onload = () => {
+                        img.src = a.image;
+                        res()
+                    };
+                    img.onerror = () => {
+                        a.image = 'Group.svg'
+                        img.src = 'Group.svg'
+                        res()
+                    }
+                    img.src = a.image
+                })))
+                setSavedArticles(articles)
+            })
             .catch(err => console.log(err))
         }  
         if(!token && !currentUser) {
